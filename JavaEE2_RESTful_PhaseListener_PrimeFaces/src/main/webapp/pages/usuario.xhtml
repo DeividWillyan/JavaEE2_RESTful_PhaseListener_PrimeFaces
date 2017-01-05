@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Usuario</title>
+</h:head>
+
+<h:body>
+	<h:form>
+		<p:panel header="Usuario">
+			<p:dataTable emptyMessage="Nenhum dado encontrado." paginator="true"
+				value="#{usuarioBean.carregarUsuarios()}" var="usuario">
+
+				<f:facet name="footer">
+					<p:commandButton value="Novo" oncomplete="PF('dialogo').show();"
+						actionListener="#{usuarioBean.novo()}"
+						update=":frmCadUsuario:pnlCadUsuario">
+					</p:commandButton>
+
+				</f:facet>
+
+				<p:column headerText="Nome">
+					<h:outputText value="#{usuario.pessoa.nome}" />
+				</p:column>
+
+				<p:column headerText="CPF">
+					<h:outputText value="#{usuario.pessoa.cpf}" />
+				</p:column>
+
+				<p:column headerText="Tipo">
+					<h:outputText value="#{usuario.tipo}" />
+				</p:column>
+
+				<p:column headerText="Ativo">
+					<h:outputText value="#{usuario.ativo}" />
+				</p:column>
+
+				<p:column headerText="Opções">
+					<p:commandButton />
+					<p:commandButton />
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+
+	<p:dialog header="Cadastro de Usuarios" widgetVar="dialogo"
+		draggable="false" resizable="false" modal="true" closable="false">
+		<h:form id="frmCadUsuario">
+			<h:panelGrid id="pnlCadUsuario" columns="2">
+
+				<p:outputLabel value="Pessoa:" />
+				<p:selectOneMenu filter="true" value="#{usuarioBean.pessoa.nome}"
+					converter="omnifaces.SelectItemsConverter">
+					<f:selectItem itemValue="" itemLabel="Selecione uma pessoa" />
+					<f:selectItems value="#{usuarioBean.pessoas}" var="pessoa"
+						itemValue="#{pessoa}" itemLabel="#{pessoa.nome}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Senha:" />
+				<p:password maxlength="8" size="10"
+					value="#{usuarioBean.usuario.senha}" />
+
+				<p:outputLabel value="Tipo:" />
+				<p:selectOneRadio value="#{usuarioBean.usuario.tipo}">
+					<f:selectItem itemValue="A" itemLabel="Administrador" />
+					<f:selectItem itemValue="G" itemLabel="Gerente" />
+					<f:selectItem itemValue="B" itemLabel="Balconista" />
+				</p:selectOneRadio>
+
+				<p:outputLabel value="Ativo:" />
+				<p:selectBooleanCheckbox value="##{usuarioBean.usuario.ativo}" />
+
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<p:commandButton value="Salvar" />
+				<p:commandButton value="Fechar" oncomplete="PF('dialogo').hide();" />
+			</h:panelGrid>
+
+		</h:form>
+	</p:dialog>
+
+
+</h:body>
+</html>
